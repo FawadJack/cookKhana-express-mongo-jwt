@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CookKhana!</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
 
-<body>
+  <body>
     <nav>
-        <div class="logo">
-            <h1>CookKhana</h1>
-        </div>
-        <ul>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/signup">Signup</a></li>
-        </ul>
+      <div class="logo">
+        <h1>CookKhana</h1>
+      </div>
+      <ul>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Signup</a></li>
+      </ul>
     </nav>
-    <div class="form">
-        <form action="" id="loginForm" class="formcss">
-            <label for="">Email</label>
-            <input type="email" name="email" placeholder="Enter Email...">
-            <label for="">Password</label>
-            <input type="password" name="pass" placeholder="password">
-            <button type="submit" class="button">Login</button>
-        </form>
+    <div class="showmsg" id="showmsg">
+      <% if(msg){ %>
+      <h2><%= msg %></h2>
+      <% }else{ %>
+      <h2><%= error %></h2>
+      <% } %>
     </div>
-</body>
+    <div class="form">
+      <form action="/users" method="post" id="loginForm" class="formcss">
+        <label for="">Email</label>
+        <input type="email" name="email" placeholder="Enter Email..." />
+        <label for="">Password</label>
+        <input type="password" name="pass" placeholder="password" />
+        <button type="submit" class="button">Login</button>
+      </form>
+    </div>
+    <script>
+        const showmsg = document.getElementById('showmsg')
+      
 
+            setTimeout(()=>{
+                showmsg.innerText=""
+            },2000)
+       
+    </script>
+  </body>
 </html>

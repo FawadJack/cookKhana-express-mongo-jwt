@@ -7,13 +7,17 @@ const mongoose = require("mongoose");
 const { connectDB } = require("./MVC/model/db");
 const { User } = require("./MVC/model/user");
 const { Recipe } = require("./MVC/model/recipes");
-const { signupErr } = require("./MVC/middleware")
+const { signupErr, loginErr,createToken,auth,alreadyAuth } = require("./MVC/middleware")
+const bcrypt = require('bcrypt');
+const cookieParser = require("cookie-parser"); //without cookie-parser req.cookies give undefine
+
 
 //middleware
 app.use(express.json());
 //use this middleware to get data directly from html form
 app.use(express.urlencoded());
 app.use(express.static(__dirname + "/public"));
+app.use(cookieParser()); //to make sure we dont get undefine jwt token error and instead redirect to login if not login
 
 //we can put this code in dbconnect becasue we only want the server to listen when user is connected to db
 app.listen(PORT, (err) => {
@@ -29,19 +33,27 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // this is to define that our ejs files are in this path from root
 
 //Routes
-app.get("/", (req, res) => {
-  res.render("index", { title: "CookKhana" });
+app.get("/",auth, async (req, res) => {
+  try {
+    // const data = await Recipe.find() //to get all the data from Recipe model (we apply function on model)
+    const data = await Recipe.find().sort({ createdAt: -1 }); //sort in decending order
+    // res.send(data)
+    // const {author,title,detail} = data
+    res.render("showallrecipe", { recipes: data });
+  } catch (error) {
+    res.render("showallrecipe", { error: error });
+  }
 });
 
 //login
-app.get("/login", (req, res) => {
+app.get("/login",alreadyAuth, (req, res) => {
     const error = req.query.err
     const msg = req.query.msg
   res.render("login",{error: error , msg: msg});
 });
 
 //signup
-app.get("/signup", (req, res) => {
+app.get("/signup",alreadyAuth, (req, res) => {
   res.render("signup");
 });
 
@@ -65,47 +77,53 @@ app.get("/signup", (req, res) => {
 // });
 
 //post signup
-app.post("/users",signupErr, async (req, res) => {
+app.post("/signup",signupErr, async (req, res) => {
   //get data from body
   const { username, email, pass } = req.body;
 //   console.log(data);
+
   try {
+    const saltRounds = 10;
+    const hashPass = await bcrypt.hash(pass,saltRounds)
     //make instance of User object
     const user = new User({
       username: username,
       email: email,
-      password: pass,
+      password: hashPass,
     });
-
+   
     //now save it
     const result = await user.save();
     
     res.redirect('/login?msg=Register Successfully!');
   } catch (error) {
     console.log(error);
-    res.redirect('/signup?err=Something went wrong');
+    res.redirect('/signup?msg=Something went wrong');
   }
+});
+
+//login post
+app.post("/login",loginErr, async (req, res) => {
+
+  const { email } = req.body;
+  const user = await User.findOne({ email: email});
+  const token = createToken(user._id);
+  const maxAge = 2 * 60;
+  res.cookie("jwt", token, {
+     httpOnly: true,
+     maxAge: maxAge * 1000
+  });
+
+  res.redirect("/");
 });
 
 //recipe
 app.get("/recipe", async (req, res) => {
-  //make new instance of Recipe document
-  const recipe = new Recipe({
-    author: "Haris",
-    title: "Second Recipe",
-    detail: "Steps:hsdkashdkjashduiwhdi",
-  });
-
-  try {
-    //save
-    const data = await recipe.save();
-    res.send(data);
-  } catch (error) {
-    res.send(error.errmsg);
-  }
+  res.render('recipes')
+ 
 });
 //show all recipes
-app.get("/showallrecipes", async (req, res) => {
+app.get("/showallrecipes",auth, async (req, res) => {
   try {
     // const data = await Recipe.find() //to get all the data from Recipe model (we apply function on model)
     const data = await Recipe.find().sort({ createdAt: -1 }); //sort in decending order

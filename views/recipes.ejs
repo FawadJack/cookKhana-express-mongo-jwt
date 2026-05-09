@@ -10,18 +10,20 @@
 <body>
     <nav>
         <div class="logo"><h1>CookKhana</h1></div>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/signup">Signup</a></li>
+        <li><a href="/">Home</a></li>
+            <li><a href="/recipe">Add Recipe</a></li>
     </nav>
     <div class="form">
-        <form action="" id="signupForm" class="formcss">
-             <label for="">Username</label>
-            <input type="text" name="username" placeholder="Username">
-           
-            <label for="">Email</label>
-            <input type="email" name="email" placeholder="Enter Email...">
-            <label for="">Password</label>
-            <input type="password" name="pass" placeholder="Password" >
+        <form action="/recipe" id="signupForm" class="formcss">
+             <label for="">Author</label>
+            <input type="text" name="author" placeholder="Author Name">
+            <label for="">Title</label>
+            <input type="text" name="title" placeholder="Enter Title">
+            <label for="">Details</label>
+            <textarea name="steps" id="" cols="30">
+                
+            </textarea>
+        
             <button type="submit" class="button">Sign Up</button>
         </form>
     </div>

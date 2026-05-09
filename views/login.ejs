@@ -18,14 +18,26 @@
       </ul>
     </nav>
     <div class="showmsg" id="showmsg">
-      <% if(msg){ %>
+      <div class="showmsg" id="showmsg">
+
+        <% if(typeof loginErrs !== "undefined"){ %>
+     
+           <% loginErrs.forEach((item)=>{ %>
+     
+              <h2 class="errMsg"><%= item %></h2>
+     
+           <% }) %>
+     
+        <% } %>
+     
+     </div>
+      <!-- we use locals becasue locasl always exist it will not give an error -->
+      <% if(locals.msg){ %>  
       <h2><%= msg %></h2>
-      <% }else{ %>
-      <h2><%= error %></h2>
-      <% } %>
+      <% }%>
     </div>
     <div class="form">
-      <form action="/users" method="post" id="loginForm" class="formcss">
+      <form action="/login" method="post" id="loginForm" class="formcss">
         <label for="">Email</label>
         <input type="email" name="email" placeholder="Enter Email..." />
         <label for="">Password</label>

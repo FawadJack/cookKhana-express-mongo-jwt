@@ -13,13 +13,13 @@
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Signup</a></li>
     </nav>
-    <div class="showmsg">
+    <div class="showmsg" id="showmsg">
 
-        <% if(typeof signupErrs !== "undefined"){ %>
+        <% if(typeof loginErrs !== "undefined"){ %>
      
-           <% signupErrs.forEach((item)=>{ %>
+           <% loginErrs.forEach((item)=>{ %>
      
-              <h2><%= item %></h2>
+              <h2 class="errMsg"><%= item %></h2>
      
            <% }) %>
      
@@ -27,7 +27,7 @@
      
      </div>
     <div class="form">
-        <form action="/users" method="post" id="signupForm" class="formcss">
+        <form action="/signup" method="post" id="signupForm" class="formcss">
              <label for="">Username</label>
             <input type="text" name="username" placeholder="Username">
            
@@ -40,4 +40,9 @@
         </form>
     </div>
   </body>
+  <script >const showmsg = document.getElementById("showmsg")
+    setTimeout(()=>{
+        showmsg.innerHTML = ""
+    },2000)
+  </script>
 </html>

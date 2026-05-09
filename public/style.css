@@ -51,7 +51,7 @@ nav a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 50vh;
 }
 
 .formcss {
@@ -160,4 +160,22 @@ nav a:hover {
     font-size: 16px;
     color: #444;
     line-height: 1.6;
+}
+.showmsg{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+.errMsg{
+
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  background-color: rgb(233, 129, 129);
+  color: red;
+  text-align: center;
 }

@@ -49,6 +49,7 @@ const signupErr = async (req, res, next) => {
 
   // Render errors
   if (signuperrors.length > 0) {
+    console.log(signuperrors)
     return res.render("signup", {
       signupErrs: signuperrors,
     });

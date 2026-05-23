@@ -28,6 +28,7 @@ nav .logo h1{
 nav ul {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 nav li{

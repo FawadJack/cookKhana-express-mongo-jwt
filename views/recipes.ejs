@@ -5,27 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CookKhana!</title>
     <link rel="stylesheet" href="/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
 </head>
 </head>
 <body>
     <nav>
         <div class="logo"><h1>CookKhana</h1></div>
         <li><a href="/">Home</a></li>
-            <li><a href="/recipe">Add Recipe</a></li>
+        
     </nav>
+    <!-- <div class="showmsg" id="showmsg"> -->
+        <div class="showmsg" id="showmsg">
+  
+          <% if(typeof recipeErr !== "undefined"){ %>
+       
+             <% recipeErr.forEach((item)=>{ %>
+       
+                <h2 class="errMsg"><%= item %></h2>
+       
+             <% }) %>
+       
+          <% } %>
+       
+       </div>
+        <!-- we use locals becasue locasl always exist it will not give an error
+        <% if(locals.msg){ %>  
+        <h2><%= msg %></h2>
+        <% }%>
+      </div> -->
     <div class="form">
-        <form action="/recipe" id="signupForm" class="formcss">
+      <form action="/recipe" method="POST" id="recipeForm" class="formcss">
+
              <label for="">Author</label>
             <input type="text" name="author" placeholder="Author Name">
             <label for="">Title</label>
             <input type="text" name="title" placeholder="Enter Title">
             <label for="">Details</label>
-            <textarea name="steps" id="" cols="30">
+            <div id="editor" style="height:200px;"></div>
+            <input type="hidden" name="steps" id="steps">
                 
-            </textarea>
-        
-            <button type="submit" class="button">Sign Up</button>
+            <button type="submit" class="button">Post</button>
         </form>
+        <div id="displaysteps"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+    <!-- <script src="/frontEndJS/recipeformHandle.js"></script> -->
+<script>
+
+const quill = new Quill('#editor', {
+    theme: 'snow'
+});
+
+const recipeForm = document.getElementById("recipeForm");
+
+recipeForm.addEventListener("submit", () => {
+
+    document.getElementById("steps").value =
+        quill.root.innerHTML;
+
+});
+
+</script>
   </body>
 </html>

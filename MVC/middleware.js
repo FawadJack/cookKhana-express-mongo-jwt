@@ -113,20 +113,18 @@ const loginErr = async (req, res, next) => {
 const My_Secret = process.env.JWT_SECRETKEY;
 //create jwt token
 const createToken = (id) => {
- 
   const maxAge = 2 * 60;
   return jwt.sign({ id }, My_Secret, {
     expiresIn: maxAge,
   });
 };
 
-
 //login auth to protects private routes
 const auth = (req, res, next) => {
   const token = req.cookies.jwt;
-
+  // (err,decodedToken)
   if (token) {
-    jwt.verify(token, My_Secret, (err, decodedToken) => {
+    jwt.verify(token, My_Secret, (err) => {
       if (err) {
         console.log(err.message);
 
@@ -136,30 +134,67 @@ const auth = (req, res, next) => {
       next();
     });
   } else {
-   if (!token) {
-   return res.redirect("/login");
-}
+    if (!token) {
+      return res.redirect("/login");
+    }
   }
 };
 //middleware to avoid login user to access login,signup page
 
 const alreadyAuth = (req, res, next) => {
-
   const token = req.cookies.jwt;
 
-  if(token){
+  if (token) {
+    jwt.verify(token, My_Secret, (err, decodedToken) => {
+      if (err) {
+        return next();
+      }
 
-     jwt.verify(token, My_Secret, (err, decodedToken) => {
-
-        if(err){
-           return next();
-        }
-
-        return res.redirect("/");
-     });
-
-  }else{
-     next();
+      return res.redirect("/");
+    });
+  } else {
+    next();
   }
 };
-module.exports = { signupErr, loginErr,createToken,auth,alreadyAuth };
+
+//recipe Error Handling
+const recipeError = (req, res, next) => {
+  let recipeErrors = [];
+
+  const { author, title, steps } = req.body;
+
+  // validation
+  if (!author || !author.trim()) {
+    recipeErrors.push("Enter Author!");
+  }
+
+  if (!title || !title.trim()) {
+    recipeErrors.push("Enter Title!");
+  }
+
+  if (!steps || steps.trim() === "" || steps === "<p><br></p>") {
+    recipeErrors.push("Enter Steps!");
+  }
+
+  // stop if errors
+  if (recipeErrors.length > 0) {
+    console.log(recipeErrors);
+
+    return res.render("recipes", {
+      recipeErr: recipeErrors,
+      recipes: []
+  });
+
+  }
+
+  // continue
+  next();
+};
+module.exports = {
+  signupErr,
+  loginErr,
+  createToken,
+  auth,
+  alreadyAuth,
+  recipeError,
+};

@@ -15,7 +15,6 @@
             <h1>CookKhana</h1>
         </div>
         <ul>
-            <li><a href="#">Home</a></li>
             <li><a href="/recipe">Add Recipe</a></li>
         </ul>
     </nav>
@@ -29,10 +28,10 @@
                 <h2>
                     <%= item.title %>
                 </h2>
-                <p>
-                    <%= item.detail %>
-                </p>
-</div>
+                <div id="displaysteps">
+                    <%- item.detail %>
+                </div>
+        </div>
 
                 <% }) %>
 
@@ -48,5 +47,7 @@
         </div>
     </div>
 </body>
+<script>
+</script>
 
 </html>

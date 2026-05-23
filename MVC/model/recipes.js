@@ -16,7 +16,11 @@ const recipeSchema = new Schema({
     detail: {
         type: String,
         trim: true
-    }
+    },
+    // imgpath: {
+    //     type: String,
+    //     trim: true
+    // }
 
 
 },{ timestamps: true })

@@ -7,15 +7,15 @@ const mongoose = require("mongoose");
 const { connectDB } = require("./MVC/model/db");
 const { User } = require("./MVC/model/user");
 const { Recipe } = require("./MVC/model/recipes");
-const { signupErr, loginErr,createToken,auth,alreadyAuth } = require("./MVC/middleware")
+const { signupErr, loginErr,createToken,auth,alreadyAuth,recipeError } = require("./MVC/middleware")
 const bcrypt = require('bcrypt');
 const cookieParser = require("cookie-parser"); //without cookie-parser req.cookies give undefine
 
 
 //middleware
-app.use(express.json());
+app.use(express.json()); //use to make sure json is handle
 //use this middleware to get data directly from html form
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(cookieParser()); //to make sure we dont get undefine jwt token error and instead redirect to login if not login
 
@@ -118,10 +118,25 @@ app.post("/login",loginErr, async (req, res) => {
 });
 
 //recipe
-app.get("/recipe", async (req, res) => {
+app.get("/recipe",auth, async (req, res) => {
   res.render('recipes')
- 
 });
+
+//add recipe
+app.post('/recipe',recipeError, async (req, res) => {
+  const { author,title,steps } = req.body
+const recipe = new Recipe({
+  author: author,
+  title: title,
+  detail: steps
+})
+//put in recipe collection in db
+    const result = await recipe.save();
+
+    res.json(result)
+
+});
+
 //show all recipes
 app.get("/showallrecipes",auth, async (req, res) => {
   try {

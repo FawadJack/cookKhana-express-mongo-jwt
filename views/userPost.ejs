@@ -17,17 +17,22 @@
     </nav>
     <div class="container">
       <div class="box">
-        <% if(recipes) { recipes.map(item=> { %>
+        <% if (recipes.length > 0) { %> <% recipes.forEach(item => { %>
+
         <div class="card">
           <h2><%= item.author %></h2>
           <h2><%= item.title %></h2>
+
           <div id="displaysteps"><%- item.detail %></div>
+
           <a href="/postDelete/<%= item._id %>">Delete</a>
           <a href="/updatePost/<%= item._id %>">Update</a>
         </div>
 
-        <% }) %> <% }else { %>
+        <% }) %> <% } else { %>
+
         <h2><%= error %></h2>
+
         <% } %>
       </div>
     </div>

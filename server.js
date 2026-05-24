@@ -14,10 +14,12 @@ const cookieParser = require("cookie-parser"); //without cookie-parser req.cooki
 
 //middleware
 app.use(express.json()); //use to make sure json is handle
-//use this middleware to get data directly from html form
+//use this middleware to get data directly from html form 
 app.use(express.urlencoded({ extended: true }));
+//use this middleware to allow relavent path
 app.use(express.static(__dirname + "/public"));
-app.use(cookieParser()); //to make sure we dont get undefine jwt token error and instead redirect to login if not login
+//to make sure we dont get undefine jwt token error and instead redirect to login if not login
+app.use(cookieParser()); 
 
 //we can put this code in dbconnect becasue we only want the server to listen when user is connected to db
 app.listen(PORT, (err) => {
@@ -123,17 +125,19 @@ app.get("/recipe",auth, async (req, res) => {
 });
 
 //add recipe
-app.post('/recipe',recipeError, async (req, res) => {
-  const { author,title,steps } = req.body
-const recipe = new Recipe({
-  author: author,
-  title: title,
-  detail: steps
-})
-//put in recipe collection in db
-    const result = await recipe.save();
+app.post('/recipe', auth, recipeError, async (req, res) => {
 
-    res.json(result)
+  const { title, steps } = req.body;
+
+  const recipe = new Recipe({
+    author: req.user.id,
+    title,
+    detail: steps
+  });
+
+  const result = await recipe.save();
+
+  res.redirect('/showallrecipes');
 
 });
 
@@ -149,6 +153,28 @@ app.get("/showallrecipes",auth, async (req, res) => {
     res.render("showallrecipe", { error: error });
   }
 });
+
+
+//get user posts
+app.get("/myrecipes", auth, async (req, res) => {
+  console.log(req.user)
+
+  const data = await Recipe.find({
+      author: req.user.id
+  }).sort({ createdAt: -1 });
+
+  res.render("userPost", {
+      recipes: data
+  });
+
+});
+
+//delete user Post
+app.get("/postDelete/:id", async (req, res) => {
+  await Recipe.findByIdAndDelete(req.params.id);
+  res.redirect("/");
+});
+
 
 //if no page is found use this
 app.use((req, res) => {

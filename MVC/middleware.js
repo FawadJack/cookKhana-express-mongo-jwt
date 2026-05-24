@@ -122,23 +122,33 @@ const createToken = (id) => {
 
 //login auth to protects private routes
 const auth = (req, res, next) => {
+
   const token = req.cookies.jwt;
-  // (err,decodedToken)
+
   if (token) {
-    jwt.verify(token, My_Secret, (err) => {
+
+    jwt.verify(token, My_Secret, (err, decoded) => {
+
       if (err) {
+
         console.log(err.message);
 
         return res.redirect("/login");
+
       }
 
+      req.user = decoded;
+
       next();
+
     });
+
   } else {
-    if (!token) {
-      return res.redirect("/login");
-    }
+
+    return res.redirect("/login");
+
   }
+
 };
 //middleware to avoid login user to access login,signup page
 
@@ -165,9 +175,9 @@ const recipeError = (req, res, next) => {
   const { author, title, steps } = req.body;
 
   // validation
-  if (!author || !author.trim()) {
-    recipeErrors.push("Enter Author!");
-  }
+  // if (!author || !author.trim()) {
+  //   recipeErrors.push("Enter Author!");
+  // }
 
   if (!title || !title.trim()) {
     recipeErrors.push("Enter Title!");

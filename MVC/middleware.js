@@ -113,9 +113,9 @@ const loginErr = async (req, res, next) => {
 
 const My_Secret = process.env.JWT_SECRETKEY;
 //create jwt token
-const createToken = (id) => {
+const createToken = (id,username) => {
   const maxAge = 2 * 60;
-  return jwt.sign({ id }, My_Secret, {
+  return jwt.sign({ id,username }, My_Secret, {
     expiresIn: maxAge,
   });
 };
@@ -172,7 +172,7 @@ const alreadyAuth = (req, res, next) => {
 const recipeError = (req, res, next) => {
   let recipeErrors = [];
 
-  const { author, title, steps } = req.body;
+  const { title, steps } = req.body;
 
   // validation
   // if (!author || !author.trim()) {

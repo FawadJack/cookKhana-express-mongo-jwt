@@ -114,7 +114,7 @@ app.post("/signup", signupErr, async (req, res) => {
 app.post("/login", loginErr, async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email: email });
-  const token = createToken(user._id);
+  const token = createToken(user._id,user.username);
   const maxAge = 2 * 60;
   res.cookie("jwt", token, {
     httpOnly: true,
@@ -134,8 +134,9 @@ app.post("/recipe", auth, recipeError, async (req, res) => {
   const { title, steps } = req.body;
 
   const recipe = new Recipe({
-    author: req.user.id,
-    title,
+    userId: req.user.id,
+    author: req.user.username.toUpperCase(),
+    title: title,
     detail: steps,
   });
 
@@ -163,7 +164,7 @@ app.get("/myrecipes", auth, async (req, res) => {
   try {
 
     const recipes = await Recipe.find({
-      author: req.user.id,
+      userId: req.user.id,
     }).sort({ createdAt: -1 });
 
     return res.render("userPost", {
@@ -182,7 +183,7 @@ app.get("/myrecipes", auth, async (req, res) => {
 
 });
 //delete user Post
-app.get("/postDelete/:id", async (req, res) => {
+app.get("/postDelete/:id",auth, async (req, res) => {
   await Recipe.findByIdAndDelete(req.params.id);
   res.redirect("/");
 });

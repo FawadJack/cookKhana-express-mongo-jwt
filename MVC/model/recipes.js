@@ -4,11 +4,16 @@ const { Schema } = mongoose;
 //make Schema for user table
 const recipeSchema = new Schema({
 
-    author: {
-        //this is done to make sure the author take user id so we can use it for searching specific user posts
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
+    },
+
+    author: {
+        type: String,
+        required: true,
+        trim: true
     },
 
     title: {

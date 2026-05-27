@@ -24,7 +24,9 @@
 
           <div id="displaysteps"><%- item.detail %></div>
 
-          <a href="/postDelete/<%= item._id %>">Delete</a>
+          <form action="/postDelete/<%= item._id %>" method="POST">
+            <button type="submit">Delete</button>
+          </form>
           <a href="/updatePost/<%= item._id %>">Update</a>
         </div>
 

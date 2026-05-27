@@ -183,9 +183,15 @@ app.get("/myrecipes", auth, async (req, res) => {
 
 });
 //delete user Post
-app.get("/postDelete/:id",auth, async (req, res) => {
-  await Recipe.findByIdAndDelete(req.params.id);
+app.post("/postDelete/:id", auth, async (req, res) => {
+
+  await Recipe.findOneAndDelete({
+    _id: req.params.id,
+    author: req.user.username.toUpperCase()
+ });
+
   res.redirect("/");
+
 });
 
 //if no page is found use this

@@ -114,7 +114,7 @@ app.post("/signup", signupErr, async (req, res) => {
 app.post("/login", loginErr, async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email: email });
-  const token = createToken(user._id,user.username);
+  const token = createToken(user._id, user.username);
   const maxAge = 2 * 60;
   res.cookie("jwt", token, {
     httpOnly: true,
@@ -126,13 +126,19 @@ app.post("/login", loginErr, async (req, res) => {
 
 //recipe
 app.get("/recipe", auth, async (req, res) => {
-  res.render("recipes");
+  res.render("postrecipes");
 });
 
 //add recipe
 app.post("/recipe", auth, recipeError, async (req, res) => {
-  const { title, steps } = req.body;
+  if (req.recipeErrors) {
+    return res.render("postrecipes", {
+      recipeErr: req.recipeErrors,
+      recipes: [],
+    });
+  }
 
+  const { title, steps } = req.body;
   const recipe = new Recipe({
     userId: req.user.id,
     author: req.user.username.toUpperCase(),
@@ -149,10 +155,12 @@ app.post("/recipe", auth, recipeError, async (req, res) => {
 app.get("/showallrecipes", auth, async (req, res) => {
   try {
     // const data = await Recipe.find() //to get all the data from Recipe model (we apply function on model)
-    const data = await Recipe.find().sort({ createdAt: -1 }); //sort in decending order
+    const recipes = await Recipe.find().sort({ createdAt: -1 }); //sort in decending order
     // res.send(data)
     // const {author,title,detail} = data
-    res.render("showallrecipe", { recipes: data });
+    res.render("showallrecipe", { recipes: recipes ,
+      error: recipes.length === 0 ? "No Data Available!" : null,
+     });
   } catch (error) {
     res.render("showallrecipe", { error: error });
   }
@@ -160,40 +168,119 @@ app.get("/showallrecipes", auth, async (req, res) => {
 
 //get user posts
 app.get("/myrecipes", auth, async (req, res) => {
-
   try {
-
     const recipes = await Recipe.find({
       userId: req.user.id,
     }).sort({ createdAt: -1 });
 
     return res.render("userPost", {
       recipes: recipes || [],
-      error: recipes.length === 0 ? "No Data Available!" : null
+      error: recipes.length === 0 ? "No Data Available!" : null,
+    });
+  } catch (error) {
+    return res.render("userPost", {
+      recipes: [],
+      error: "Something went wrong",
+    });
+  }
+});
+//delete user Post
+app.post("/postDelete/:id", auth, async (req, res) => {
+  await Recipe.findOneAndDelete({
+    _id: req.params.id,
+    author: req.user.username.toUpperCase(),
+  });
+
+  res.redirect("/");
+});
+
+//update function (first get data to display on screen)
+app.get("/updatePost/:id", auth, async (req, res) => {
+  try {
+    const recipe = await Recipe.findOne({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!recipe) {
+      return res.redirect("/");
+    }
+    // console.log(recipe)
+    res.render("updateRecipe", {
+      recipe: recipe,
+    });
+  } catch (error) {
+    res.redirect("/");
+  }
+});
+
+//update post
+app.post("/updatePost/:id", auth, recipeError, async (req, res) => {
+  // validation failed
+  if (req.recipeErrors) {
+    return res.render("updateRecipe", {
+      recipe: {
+        _id: req.params.id,
+        title: req.body.title,
+        detail: req.body.steps,
+      },
+
+      recipeErr: req.recipeErrors,
+    });
+  }
+
+  // update recipe
+  await Recipe.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      userId: req.user.id,
+    },
+    {
+      title: req.body.title,
+      detail: req.body.steps,
+    }
+  );
+
+  res.redirect("/myrecipes");
+});
+
+//read detail
+app.get("/recipeDetail/:id", auth, async (req, res) => {
+
+  try {
+
+    const recipe = await Recipe.findById(req.params.id);
+
+    if (!recipe) {
+
+      console.log("recipe does not exist");
+
+      return res.redirect("/");
+
+    }
+
+    res.render("recipeDetail", {
+      recipe: recipe,
     });
 
   } catch (error) {
 
-    return res.render("userPost", {
-      recipes: [],
-      error: "Something went wrong"
-    });
+    res.redirect("/");
 
   }
 
 });
-//delete user Post
-app.post("/postDelete/:id", auth, async (req, res) => {
 
-  await Recipe.findOneAndDelete({
-    _id: req.params.id,
-    author: req.user.username.toUpperCase()
- });
+//LOGOUT
+app.post("/logout", (req, res) => {
 
-  res.redirect("/");
+  res.clearCookie("jwt",{
+    httpOnly: true
+  });
+
+  res.redirect("/login");
 
 });
-
 //if no page is found use this
 app.use((req, res) => {
   res.status(404).render("404");

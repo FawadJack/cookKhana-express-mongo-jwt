@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Chewy&display=swap");
 /* Reset */
 * {
   margin: 0;
@@ -12,7 +13,7 @@ body {
 }
 
 /* ================= NAVBAR ================= */
-nav{
+nav {
   width: 100%;
   background: #ff6b6b;
   display: flex;
@@ -21,21 +22,40 @@ nav{
   padding: 16px 40px;
 }
 
-nav .logo h1{
-  color: white;
-  font-size: 2rem;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 }
+
+.logoIcon {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  /* border-radius: 50%; */
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f8f8f8;
+  letter-spacing: 1px;
+  font-family: "Chewy", system-ui;
+}
+
 nav ul {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-nav li{
+nav li {
   list-style: none;
 }
 
-nav li a{
+nav li a {
   text-decoration: none;
   color: white;
   font-size: 1.1rem;
@@ -47,7 +67,7 @@ nav a:hover {
 
 /* ================= LOGIN FORM ================= */
 /* FORM SECTION */
-.form{
+.form {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -56,17 +76,17 @@ nav a:hover {
 }
 
 /* Bigger box */
-.formcss{
+.formcss {
   width: 100%;
   max-width: 500px;
   background: #f5f5f5;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Labels */
-.formcss label{
+.formcss label {
   display: block;
   margin-bottom: 8px;
   margin-top: 18px;
@@ -75,7 +95,7 @@ nav a:hover {
 }
 
 /* Inputs */
-.formcss input{
+.formcss input {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -84,13 +104,13 @@ nav a:hover {
 }
 
 /* Quill editor */
-#editor{
+#editor {
   background: white;
   border-radius: 6px;
 }
 
 /* Button */
-.button{
+.button {
   width: 100%;
   padding: 14px;
   margin-top: 25px;
@@ -103,18 +123,18 @@ nav a:hover {
   transition: 0.3s;
 }
 
-.button:hover{
+.button:hover {
   background: #ff5252;
 }
 
 /* Error messages */
-.showmsg{
+.showmsg {
   width: 100%;
   text-align: center;
   margin-top: 15px;
 }
 
-.errMsg{
+.errMsg {
   color: red;
   margin: 5px 0;
 }
@@ -129,14 +149,14 @@ nav a:hover {
 
 .box {
   display: flex;
-  flex-direction: column;
-  gap:10px;
 
-  max-width: 800px;
+  gap: 10px;
+
   background: white;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
 .box h1 {
@@ -149,85 +169,112 @@ nav a:hover {
   color: #555;
 }
 
+.detailBox {
+  display: flex;
+
+  gap: 10px;
+
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  width: 60vw;
+}
+.detailBox h1 {
+  margin-bottom: 15px;
+  color: #333;
+}
+.detailBox p {
+  line-height: 1.6;
+  color: #555;
+}
+.detailBox .card{
+  width: 100vw;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
+  font-family: Arial, sans-serif;
+}
 .card {
-    width: 320px;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: 0.3s ease;
-    font-family: Arial, sans-serif;
+  width: 320px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
+  font-family: Arial, sans-serif;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .card .author {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 10px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
 }
 
 .card .title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #222;
-    margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 12px;
 }
 
 .card .detail {
-    font-size: 16px;
-    color: #444;
-    line-height: 1.6;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
 }
 
 /* RESPONSIVE DESIGN */
-@media (max-width: 768px){
-
-  nav{
-      padding: 14px 20px;
+@media (max-width: 768px) {
+  nav {
+    padding: 14px 20px;
   }
 
-  nav .logo h1{
-      font-size: 1.5rem;
+  nav .logo h1 {
+    font-size: 1.5rem;
   }
 
-  nav li a{
-      font-size: 1rem;
+  nav li a {
+    font-size: 1rem;
   }
 
-  .formcss{
-      max-width: 100%;
-      padding: 20px;
+  .formcss {
+    max-width: 100%;
+    padding: 20px;
   }
 
-  #editor{
-      height: 180px !important;
+  #editor {
+    height: 180px !important;
   }
 }
 
-@media (max-width: 480px){
-
-  nav{
-      flex-direction: column;
-      gap: 10px;
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .form{
-      padding: 20px 10px;
+  .form {
+    padding: 20px 10px;
   }
 
-  .formcss{
-      padding: 18px;
+  .formcss {
+    padding: 18px;
   }
 
-  .button{
-      font-size: 1rem;
+  .button {
+    font-size: 1rem;
   }
 
-  #editor{
-      height: 150px !important;
+  #editor {
+    height: 150px !important;
   }
 }

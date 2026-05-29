@@ -170,14 +170,10 @@ const alreadyAuth = (req, res, next) => {
 
 //recipe Error Handling
 const recipeError = (req, res, next) => {
+
   let recipeErrors = [];
 
   const { title, steps } = req.body;
-
-  // validation
-  // if (!author || !author.trim()) {
-  //   recipeErrors.push("Enter Author!");
-  // }
 
   if (!title || !title.trim()) {
     recipeErrors.push("Enter Title!");
@@ -187,19 +183,16 @@ const recipeError = (req, res, next) => {
     recipeErrors.push("Enter Steps!");
   }
 
-  // stop if errors
   if (recipeErrors.length > 0) {
-    console.log(recipeErrors);
 
-    return res.render("recipes", {
-      recipeErr: recipeErrors,
-      recipes: []
-  });
+    req.recipeErrors = recipeErrors;
+
+    return next();
 
   }
 
-  // continue
   next();
+
 };
 module.exports = {
   signupErr,

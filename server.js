@@ -23,7 +23,7 @@ app.use(express.json()); //use to make sure json is handle
 //use this middleware to get data directly from html form
 app.use(express.urlencoded({ extended: true }));
 //use this middleware to allow relavent path
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("public"));
 //to make sure we dont get undefine jwt token error and instead redirect to login if not login
 app.use(cookieParser());
 

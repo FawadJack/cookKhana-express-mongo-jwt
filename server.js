@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config(); //this wil allow to use process.env anywhere in the server
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const path = require("path");
 const mongoose = require("mongoose");
 const { connectDB } = require("./MVC/model/db");
@@ -65,24 +65,6 @@ app.get("/signup", alreadyAuth, (req, res) => {
   res.render("signup");
 });
 
-// app.get("/register", async (req, res) => {
-//   const user = new User({
-//     username: "hammad111",
-//     email: "hammad11@gmail.com",
-//     password: "12345",
-//   });
-//   try {
-//     //now to save that we will use
-//     const data = await user.save();
-
-//     console.log(data);
-//     res.send(data);
-//   } catch (error) {
-//     if (error) {
-//       res.send(error.errmsg);
-//     }
-//   }
-// });
 
 //post signup
 app.post("/signup", signupErr, async (req, res) => {
